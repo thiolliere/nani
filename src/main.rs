@@ -48,7 +48,7 @@ fn view(app: &App, _model: &Model, frame: &Frame) {
 	let mut orientation = true;
 	while size >= 1.0 {
 		let next_size = size * (1.0 - (1.0 - percent) * 2.0);
-		draw_square(&draw, size, next_size, percent, orientation);
+		draw_square(&draw, size, percent, orientation);
 		orientation = !orientation;
 		size = next_size;
 	}
@@ -62,29 +62,22 @@ fn duration_to_fractional(dur: Duration) -> f32 {
 
 const LINE_THICKNESS: f32 = 2.0;
 
-fn draw_square(draw: &app::Draw, size: f32, next_size: f32, percent: f32, orientation: bool) {
+fn draw_square(draw: &app::Draw, size: f32, percent: f32, orientation: bool) {
 	for &dx in [-1.0, 1.0].iter() {
 		for &dy in [-1.0, 1.0].iter() {
 			let start = Point2::new(dx, dy) * size;
-			let (side_dir, center_dir) = if (dx.signum() != dy.signum()) ^ orientation {
+			let (side_dir, _center_dir) = if (dx.signum() != dy.signum()) ^ orientation {
 				(Point2::new(0.0, - dy.signum()), (Point2::new(-dx.signum(), 0.0)))
 			} else {
 				(Point2::new(- dx.signum(), 0.0), (Point2::new(0.0, -dy.signum())))
 			};
-			let end1 = start + side_dir * percent * 2.0 * size;
-			let end2 = end1 + center_dir * (size - next_size);
+			let end = start + side_dir * percent * 2.0 * size;
 			draw.line()
 				.caps_square()
 				.color(BLACK)
 				.thickness(LINE_THICKNESS)
 				.start(start)
-				.end(end1);
-			draw.line()
-				.caps_square()
-				.color(BLACK)
-				.thickness(LINE_THICKNESS)
-				.start(start)
-				.end(end2);
+				.end(end);
 		}
 	}
 }
