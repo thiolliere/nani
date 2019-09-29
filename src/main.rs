@@ -65,19 +65,19 @@ const LINE_THICKNESS: f32 = 2.0;
 fn draw_square(draw: &app::Draw, size: f32, next_size: f32, percent: f32, orientation: bool) {
 	for &dx in [-1.0, 1.0].iter() {
 		for &dy in [-1.0, 1.0].iter() {
-			let start = Point2::new(dx, dy);
+			let start = Point2::new(dx, dy) * size;
 			let (side_dir, center_dir) = if (dx.signum() != dy.signum()) ^ orientation {
-				(Point2::new(0.0, - dy.signum()), (Point2::new(dx.signum(), 0.0)))
+				(Point2::new(0.0, - dy.signum()), (Point2::new(-dx.signum(), 0.0)))
 			} else {
-				(Point2::new(- dx.signum(), 0.0), (Point2::new(0.0, dy.signum())))
+				(Point2::new(- dx.signum(), 0.0), (Point2::new(0.0, -dy.signum())))
 			};
-			let end = start + side_dir * percent * 2.0 + center_dir * (size - next_size);
+			let end = start + side_dir * percent * 2.0 *size + center_dir * (size - next_size);
 			draw.line()
 				.caps_square()
 				.color(BLACK)
 				.thickness(LINE_THICKNESS)
-				.start(start*size)
-				.end(end*size);
+				.start(start)
+				.end(end);
 		}
 	}
 }
