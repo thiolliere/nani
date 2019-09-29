@@ -71,13 +71,20 @@ fn draw_square(draw: &app::Draw, size: f32, next_size: f32, percent: f32, orient
 			} else {
 				(Point2::new(- dx.signum(), 0.0), (Point2::new(0.0, -dy.signum())))
 			};
-			let end = start + side_dir * percent * 2.0 *size + center_dir * (size - next_size);
+			let end1 = start + side_dir * percent * 2.0 * size;
+			let end2 = end1 + center_dir * (size - next_size);
 			draw.line()
 				.caps_square()
 				.color(BLACK)
 				.thickness(LINE_THICKNESS)
 				.start(start)
-				.end(end);
+				.end(end1);
+			draw.line()
+				.caps_square()
+				.color(BLACK)
+				.thickness(LINE_THICKNESS)
+				.start(start)
+				.end(end2);
 		}
 	}
 }
